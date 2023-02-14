@@ -17,8 +17,12 @@
         <!--Edit dialog-->
         <v-dialog v-model="editDialog" max-width="600">
             <v-card elevation="5">
-                <v-card-title>
-                    Edit School: {{ editing_Position.name }}?
+                <v-card-title class="text-h6 grey lighten-2 pt-1 pb-1 mt-1 mb-1 pr-0 mr-0">
+                    <span>Update Position</span>
+                    <v-spacer></v-spacer>
+                    <v-btn icon tile @click="editDialog = false">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
                 </v-card-title>
                 <v-card-text>
                     <form>
@@ -60,13 +64,17 @@
                             </span>
                         </div>
                     </form>
+                </v-card-text>
+                <v-divider class="m-0" style="background-color:#90A4AE; width:100%;"></v-divider>
+                <v-card-actions class="pr-2">
+                    <v-spacer></v-spacer>
                     <v-btn color="success" @click="editItem(editing_Position)">
                         Update
                     </v-btn>
                     <v-btn @click="clear">
                         clear
                     </v-btn>
-                </v-card-text>
+                </v-card-actions>
             </v-card>
         </v-dialog>
     </div>

@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\BranchCollection;
+use JWTAuth;
 use App\Models\Branch;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Response;
-use App\Http\Resources\ErrorBadRequest;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\ErrorBadRequest;
+use App\Http\Resources\BranchCollection;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserResourceCollection;
-use JWTAuth;
+
 class BranchController extends Controller
 {
     /**
@@ -27,17 +29,6 @@ class BranchController extends Controller
     {
         return new BranchCollection(Branch::orderBy('id')->get());
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -46,7 +37,23 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated=$request->validate([
+            'name_en' => ['required'],
+            'name_kh' => ['required'],
+            'code' => ['required'],
+        ]);
+        $school=Branch::create([
+            'name_en' => $request->name_en,
+            'name_kh' => $request->name_kh,
+            'code' => $request->code,
+            'school_id' => $request->school_id,
+            'description'=>$request->description,
+            'created_by'=>Auth::user()->id,
+        ]);
+        return [
+            'message'=> 'Branch has been created!',
+            'snackColor'=> 'success',
+        ];
     }
 
     /**

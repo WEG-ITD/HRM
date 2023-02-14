@@ -16,7 +16,6 @@ class Branch extends Model
         'id','school_id','name_en','name_kh','code','description','created_by','deleted_by'
     ];
 
-   
     public function school()
     {
         return $this->belongsTo(School::class);

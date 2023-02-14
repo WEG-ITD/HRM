@@ -5,11 +5,11 @@
             <div>
                 <!-- <v-card-title style="color: '#DF9D0E'""><v-icon>mdi-home-assistant</v-icon> School Details <v-divider></v-divider></v-card-title> -->
                 <!-- --------------------------school Details----------------------- -->
-                <v-card-title style="padding-bottom: 0">
+                <!-- <v-card-title style="padding-bottom: 0">
                     <v-icon medium left color="#DF9D0E">mdi-home-assistant</v-icon>
                     <span class="title font-weight-light" style="color:#DF9D0E">School Details</span>
                     <v-divider style="background-color:#DF9D0E; width:100%;"></v-divider>
-                </v-card-title>
+                </v-card-title> -->
                 <v-card-text>
                     <div v-if="errors" style="color:red">
                         <span v-for="(err,i) in errors" :key="i">
@@ -23,8 +23,8 @@
                         <v-text-field
                                     v-model="form.name_en"
                                     :error-messages="nameEnErrors"
-                                    :counter="30"
-                                    label="Name_en"
+                                    :counter="100"
+                                    label="Name en"
                                     required
                                     @input="$v.form.name_en.$touch()"
                                     @blur="$v.form.name_en.$touch()"
@@ -40,8 +40,8 @@
                                 <v-text-field
                                     v-model="form.name_kh"
                                     :error-messages="nameKhErrors"
-                                    :counter="30"
-                                    label="Name_kh"
+                                    :counter="100"
+                                    label="Name kh"
                                     required
                                     @input="$v.form.name_kh.$touch()"
                                     @blur="$v.form.name_kh.$touch()"
@@ -54,15 +54,36 @@
                                         >{{ error }}
                                     </span>
                                 </div>
-                                <v-text-field
-                                    v-model="form.code"
-                                    :error-messages="codeErrors"
-                                    :counter="5"
-                                    label="Code"
-                                    required
-                                    @input="$v.form.code.$touch()"
-                                    @blur="$v.form.code.$touch()"
-                                ></v-text-field>
+                                <v-row>
+                                    <v-col cols="4">
+                                        <v-text-field
+                                            v-model="form.code"
+                                            :error-messages="codeErrors"
+                                            :counter="5"
+                                            label="Code"
+                                            required
+                                            @input="$v.form.code.$touch()"
+                                            @blur="$v.form.code.$touch()"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="8">
+                                        <v-select
+                                            v-model="form.school_id"
+                                            :items="schools"
+                                            item-text="name_en"
+                                            item-value="id"
+                                            label="School">
+                                        </v-select>
+                                        <div v-if="errors.school_id">
+                                            <span
+                                                style="color: red"
+                                                v-for="(error, index) in errors.school_id"
+                                                :key="index"
+                                                >{{ error }}
+                                            </span>
+                                        </div>
+                                    </v-col>
+                                </v-row>
                                 <div v-if="errors.code">
                                     <span
                                         style="color: red"
@@ -71,11 +92,8 @@
                                         >{{ error }}
                                     </span>
                                 </div>
-                                <v-text-field
-                                    v-model="form.description"
-                                    :counter="100"
-                                    label="Description"
-                                ></v-text-field>
+                                <label>Description</label>
+                                <vue-editor label="Description" v-model="form.description" :editorToolbar="customToolbar"></vue-editor>
                                 <div v-if="errors.name">
                                     <span
                                         style="color: red"
@@ -84,23 +102,9 @@
                                         >{{ error }}
                                     </span>
                                 </div>
-                                <v-select
-                                    v-model="form.school_id"
-                                    :items="schools"
-                                    item-text="name_en"
-                                    item-value="id"
-                                    label="School">
-                                </v-select>
-                                <div v-if="errors.school_id">
-                                    <span
-                                        style="color: red"
-                                        v-for="(error, index) in errors.school_id"
-                                        :key="index"
-                                        >{{ error }}
-                                    </span>
-                                </div>
                     </v-form>
                     <v-spacer></v-spacer>
+                    <p></p>
                     <v-btn color="success" @click="submit"> Add </v-btn>
                     <v-btn @click="clear"> clear </v-btn>
                 </v-card-text>
@@ -111,6 +115,7 @@
 
 <script>
 import { validationMixin } from "vuelidate";
+import { VueEditor } from 'vue2-quill-editor';
 import {
     required,
     maxLength,
@@ -126,11 +131,12 @@ export default {
         schools: Array(),
     },
     components: {
+        VueEditor,
     },
     validations: {
         form: {
-            name_en: { required, maxLength: maxLength(30) },
-            name_kh: { required, maxLength: maxLength(30) },
+            name_en: { required, maxLength: maxLength(100) },
+            name_kh: { required, maxLength: maxLength(100) },
             code: { required, maxLength: maxLength(5) },
             school_id: { required },
         },
@@ -145,6 +151,22 @@ export default {
                 description : '',
                 school_id : null,
             },
+            customToolbar: [
+                [{ header: [false, 1, 2, 3, 4, 5, 6] }],
+                ["bold", "italic", "underline", "strike"], // toggled buttons
+                [
+                    { align: "" },
+                    { align: "center" },
+                    { align: "right" },
+                    { align: "justify" }
+                ],
+                ["blockquote", "code-block"],
+                [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
+                [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+                [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+                ["link", "image", "video"],
+                ["clean"] // remove formatting button
+            ],
         };
     },
     computed: {
@@ -203,6 +225,7 @@ export default {
                     });
             }
         },
+
         clear() {
             this.$v.form.$reset();
             this.form.name_en='';

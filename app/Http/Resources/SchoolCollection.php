@@ -28,7 +28,8 @@ class SchoolCollection extends ResourceCollection
                 'create' => Auth::user()->can('create', School::class),
                 'import' => Auth::user()->can('import', School::class),
                 'export' => Auth::user()->can('export', School::class),
-            ]
+            ],
+            'schools' => School::get(),
         ];
     }
 }
