@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use App\Http\Controllers\ApiResponse;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Branch;
+use App\Models\School;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ApiResponse;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class BranchCollection extends ResourceCollection
 {
@@ -26,6 +27,7 @@ class BranchCollection extends ResourceCollection
             "title" => ApiResponse::TITLE_OK,
             "status" => ApiResponse::STATUS_OK,
             'auth'=>Auth::user(),
+            'schools' => School::get(),
             'can'=>[
                 'create'=>Auth::user()->can('create',Branch::class),
                 'import'=>Auth::user()->can('import',Branch::class),

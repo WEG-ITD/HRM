@@ -15,7 +15,100 @@
 
         </Table>
         <!--Edit dialog-->
-        <v-dialog v-model="editDialog" max-width="600">
+        <v-dialog
+            v-model="editDialog"
+            max-width="600"
+        >
+            <v-card class="rounded-sm">
+                <v-card-title class="text-h6 grey lighten-2 pt-1 pb-1 mt-1 mb-1 pr-0 mr-0">
+                    <span>Update School</span>
+                    <v-spacer></v-spacer>
+                    <v-btn icon tile @click="editDialog = false">
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </v-card-title>
+                <p></p>
+                <v-card-text class="text--primary">
+                    <form @submit.prevent="submit">
+                        <v-text-field
+                            v-model="form.name_en"
+                            :error-messages="nameEnErrors"
+                            :counter="30"
+                            label="Name_en"
+                            required
+                            @input="$v.form.name_en.$touch()"
+                            @blur="$v.form.name_en.$touch()"
+                        ></v-text-field>
+                        <div v-if="errors.name_en">
+                            <span style="color: red" v-for="(error, index) in errors.name_en" :key="index">{{ error }}
+                            </span>
+                        </div>
+                        <v-text-field
+                            v-model="form.name_kh"
+                            :error-messages="nameKhErrors"
+                            :counter="30"
+                            label="Name_kh"
+                            required
+                            @input="$v.form.name_kh.$touch()"
+                            @blur="$v.form.name_kh.$touch()"
+                        ></v-text-field>
+                        <div v-if="errors.name_kh">
+                            <span style="color: red" v-for="(error, index) in errors.name_kh" :key="index">{{ error }}
+                            </span>
+                        </div>
+
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field
+                                    v-model="form.code"
+                                    :error-messages="codeErrors"
+                                    :counter="5"
+                                    label="Code"
+                                    required
+                                    @input="$v.form.code.$touch()"
+                                    @blur="$v.form.code.$touch()"
+                                ></v-text-field>
+                                <div v-if="errors.code">
+                                    <span style="color: red" v-for="(error, index) in errors.code" :key="index">{{ error }}
+                                    </span>
+                                </div>
+                            </v-col>
+                        </v-row>
+                        <!-- <v-text-field v-model="form.description" :counter="100" label="Description"></v-text-field> -->
+                        <!-- <v-text-field
+                            v-model="form.description"
+                            :counter="100"
+                            label="Description"
+                        ></v-text-field> -->
+                        <v-textarea
+                            counter
+                            rows="2"
+                            label="Description"
+                            auto-grow
+                            type="text"
+                            v-model="form.description"
+                        ></v-textarea>
+                        <div v-if="errors.name">
+                            <span style="color: red" v-for="(error, index) in errors.description" :key="index">{{
+                                error
+                            }}
+                            </span>
+                        </div>
+                    </form>
+                </v-card-text>
+                <v-divider class="m-0" style="background-color:#90A4AE; width:100%;"></v-divider>
+                <v-card-actions class="pr-2">
+                    <v-spacer></v-spacer>
+                    <v-btn color="success" @click="editItem(editing_School)">
+                        Update
+                    </v-btn>
+                    <v-btn @click="clear">
+                        clear
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <!-- <v-dialog v-model="editDialog" max-width="600">
             <v-card elevation="5">
                 <v-card-title>
                     Edit School: {{ editing_School.name }}?
@@ -81,7 +174,7 @@
                     </v-btn>
                 </v-card-text>
             </v-card>
-        </v-dialog>
+        </v-dialog> -->
     </div>
 </template>
 

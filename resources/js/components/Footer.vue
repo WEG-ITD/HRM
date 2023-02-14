@@ -2,7 +2,7 @@
 <template class="pt-0 pb-0 mb-0 mt-0">
     <v-footer fixed padless class="pt-0 pb-0 mb-0 mt-0 footer-border-top">
         <v-col cols="2"></v-col>
-        <v-col class="text-center" cols="5" style="padding-left: 28px">
+        <v-col class="text-center" cols="5">
             <v-card-text class="py-2 white--text text-center">
                 <v-subheader class="pt-0 pb-0 mb-0 mt-0 subheader-height">© {{ new Date().getFullYear() }} — Westline
                     Education Group. All Rights Reserved.</v-subheader>

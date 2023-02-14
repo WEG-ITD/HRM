@@ -1,103 +1,92 @@
 <template>
     <div class="m-1" style="margin:auto">
-        <div class="pb-3 pl-3 pr-3">
+        <div class="p-3 m-3">
             <!-- Add School-->
             <template>
-                    <form @submit.prevent="submit">
-                        <v-row>
-                            <v-col cols="6">
-                                <v-text-field
-                                    v-model="form.name_en"
-                                    :error-messages="nameEnErrors"
-                                    :counter="30"
-                                    label="Name_en"
-                                    required
-                                    @input="$v.form.name_en.$touch()"
-                                    @blur="$v.form.name_en.$touch()"
-                                ></v-text-field>
-                                <div v-if="errors.name_en">
-                                    <span
-                                        style="color: red"
-                                        v-for="(error, index) in errors.name_en"
-                                        :key="index"
-                                        >{{ error }}
-                                    </span>
-                                </div>
-                            </v-col>
-                            <v-col cols="6">
-                                <v-text-field
-                                    v-model="form.name_kh"
-                                    :error-messages="nameKhErrors"
-                                    :counter="30"
-                                    label="Name_kh"
-                                    required
-                                    @input="$v.form.name_kh.$touch()"
-                                    @blur="$v.form.name_kh.$touch()"
-                                ></v-text-field>
-                                <div v-if="errors.name_kh">
-                                    <span
-                                        style="color: red"
-                                        v-for="(error, index) in errors.name_kh"
-                                        :key="index"
-                                        >{{ error }}
-                                    </span>
-                                </div>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="12">
-                                <v-text-field
-                                    v-model="form.code"
-                                    :error-messages="codeErrors"
-                                    :counter="5"
-                                    label="Code"
-                                    required
-                                    @input="$v.form.code.$touch()"
-                                    @blur="$v.form.code.$touch()"
-                                ></v-text-field>
-                                <div v-if="errors.code">
-                                    <span
-                                        style="color: red"
-                                        v-for="(error, index) in errors.code"
-                                        :key="index"
-                                        >{{ error }}
-                                    </span>
-                                </div>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col cols="12">
-                                <!-- <v-text-field
-                                    v-model="form.description"
-                                    :counter="100"
-                                    label="Description"
-                                ></v-text-field> -->
-                                <v-textarea
-                                    v-model="form.description"
-                                    filled
-                                    auto-grow
-                                    label="Description"
-                                    rows="3"
-                                    row-height="20"
-                                ></v-textarea>
-                                <div v-if="errors.name">
-                                    <span
-                                        style="color: red"
-                                        v-for="(error, index) in errors.description"
-                                        :key="index"
-                                        >{{ error }}
-                                    </span>
-                                </div>
-                            </v-col>
-                        </v-row>
-                    </form>
-                    <v-btn color="success" @click="submit"> Add </v-btn>
-                    <v-btn @click="clear"> clear </v-btn>
-
+                <form @submit.prevent="submit">
+                    <v-row>
+                        <v-col cols="6" class="p-0 m-0">
+                            <v-text-field
+                                v-model="form.name_en"
+                                :error-messages="nameEnErrors"
+                                :counter="30"
+                                label="Name_en"
+                                required
+                                @input="$v.form.name_en.$touch()"
+                                @blur="$v.form.name_en.$touch()"
+                            ></v-text-field>
+                            <div v-if="errors.name_en">
+                                <span
+                                    style="color: red"
+                                    v-for="(error, index) in errors.name_en"
+                                    :key="index"
+                                    >{{ error }}
+                                </span>
+                            </div>
+                        </v-col>
+                        <v-col cols="6" class="p-0 m-0">
+                            <v-text-field
+                                v-model="form.name_kh"
+                                :error-messages="nameKhErrors"
+                                :counter="30"
+                                label="Name_kh"
+                                required
+                                @input="$v.form.name_kh.$touch()"
+                                @blur="$v.form.name_kh.$touch()"
+                            ></v-text-field>
+                            <div v-if="errors.name_kh">
+                                <span
+                                    style="color: red"
+                                    v-for="(error, index) in errors.name_kh"
+                                    :key="index"
+                                    >{{ error }}
+                                </span>
+                            </div>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" class="p-0 m-0">
+                            <v-text-field
+                                v-model="form.code"
+                                :error-messages="codeErrors"
+                                :counter="5"
+                                label="Code"
+                                required
+                                @input="$v.form.code.$touch()"
+                                @blur="$v.form.code.$touch()"
+                            ></v-text-field>
+                            <div v-if="errors.code">
+                                <span
+                                    style="color: red"
+                                    v-for="(error, index) in errors.code"
+                                    :key="index"
+                                    >{{ error }}
+                                </span>
+                            </div>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" class="p-0 m-0">
+                            <label>Description</label>
+                            <vue-editor
+                                v-model="form.description"
+                                :editorToolbar="customToolbar"
+                            ></vue-editor>
+                            <div v-if="errors.name">
+                                <span
+                                    style="color: red"
+                                    v-for="(error, index) in errors.description"
+                                    :key="index"
+                                    >{{ error }}
+                                </span>
+                            </div>
+                            <p></p>
+                        </v-col>
+                    </v-row>
+                </form>
+                <v-btn color="success" @click="submit"> Add </v-btn>
+                <v-btn @click="clear"> clear </v-btn>
             </template>
-
-
-
         </div>
     </div>
 </template>
@@ -111,7 +100,7 @@ import {
     email,
 } from "vuelidate/lib/validators";
 import Snackbar from "@/components/Snackbar";
-
+import { VueEditor } from 'vue2-quill-editor';
 import axios from "axios";
 export default {
     mixins: [validationMixin],
@@ -120,12 +109,13 @@ export default {
     },
     components: {
         Snackbar,
+        VueEditor
     },
     validations: {
         form: {
-            name_en: { required, maxLength: maxLength(30) },
-            name_kh: { required, maxLength: maxLength(30) },
-            code: { required, maxLength: maxLength(5) },
+            name_en: { required, maxLength: maxLength(100) },
+            name_kh: { required, maxLength: maxLength(100) },
+            code: { required, maxLength: maxLength(10) },
         },
     },
     data() {
@@ -147,21 +137,37 @@ export default {
                 description : '',
             },
             overlay: false,
+            customToolbar: [
+                [{ header: [false, 1, 2, 3, 4, 5, 6] }],
+                ["bold", "italic", "underline", "strike"], // toggled buttons
+                [
+                    { align: "" },
+                    { align: "center" },
+                    { align: "right" },
+                    { align: "justify" }
+                ],
+                ["blockquote", "code-block"],
+                [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
+                [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+                [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+                ["link", "image", "video"],
+                ["clean"] // remove formatting button
+            ],
         };
     },
     computed: {
         nameEnErrors() {
             const errors = [];
             if (!this.$v.form.name_en.$dirty) return errors;
-            !this.$v.form.name_en.maxLength && errors.push("Name_en must be at most 30 characters long");
-            !this.$v.form.name_en.required && errors.push("Name_en is required.");
+            !this.$v.form.name_en.maxLength && errors.push("Name en must be at most 100 characters long");
+            !this.$v.form.name_en.required && errors.push("Name en is required.");
             return errors;
         },
         nameKhErrors() {
             const errors = [];
             if (!this.$v.form.name_kh.$dirty) return errors;
-            !this.$v.form.name_kh.maxLength && errors.push("Name_kh must be at most 30 characters long");
-            !this.$v.form.name_kh.required && errors.push("Name_kh is required.");
+            !this.$v.form.name_kh.maxLength && errors.push("Name kh must be at most 100 characters long");
+            !this.$v.form.name_kh.required && errors.push("Name kh is required.");
             return errors;
         },
 
@@ -216,3 +222,8 @@ export default {
     watch: {},
 };
 </script>
+<style>
+    #editor .quill-editor .ql-container {
+        height: 60%
+    }
+</style>

@@ -34,15 +34,15 @@ export default [
             permission:'user'
         }
     },
-    {
-        path: '/admin/users/:create',
-        name: 'admin.users',
-        component: CreateUser,
-        meta: {
-            requiresAuth: true,
-            permission:'user'
-        }
-    },
+    // {
+    //     path: '/admin/users/:create',
+    //     name: 'admin.users',
+    //     component: CreateUser,
+    //     meta: {
+    //         requiresAuth: true,
+    //         permission:'user'
+    //     }
+    // },
     {
         path: '/admin/roles',
         name: 'admin.roles',

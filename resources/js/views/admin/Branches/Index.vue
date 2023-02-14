@@ -4,10 +4,10 @@
             <v-tabs v-model="tab">
                 <v-tabs-slider></v-tabs-slider>
                 <v-tab>
-                    <v-icon class="mr-2">mdi-view-list </v-icon> Branches List
+                    <v-icon class="mr-2">mdi-view-list </v-icon> Branches / Departments List
                 </v-tab>
                 <v-tab v-if="can.create">
-                    <v-icon class="mr-2">mdi-plus-box-multiple </v-icon> Create Branch
+                    <v-icon class="mr-2">mdi-plus-box-multiple </v-icon> Create Branch / Department
                 </v-tab>
             </v-tabs>
             <!-- <v-divider></v-divider> -->
@@ -27,12 +27,13 @@
 <script>
     import Datatable from "./Datatable.vue";
     import Create from "./Create.vue";
-
+    import { VueEditor } from 'vue2-quill-editor';
     import axios from "axios";
     export default {
         components: {
             Datatable,
-            Create
+            Create,
+            VueEditor
         },
         data: () => ({
             loading:true,
@@ -45,7 +46,6 @@
             this.initialize();
         },
         created() {
-            console.log('asdf');
             this.user = this.$store.state.auth.user;
             this.initialize();
         },

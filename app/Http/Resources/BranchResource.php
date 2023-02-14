@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Branch;
+use App\Models\School;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
