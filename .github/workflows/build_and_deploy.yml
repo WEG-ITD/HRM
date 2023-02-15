@@ -13,6 +13,7 @@ jobs:
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: weg_hr
+          CACHE_PATH: ${{ runner.temp }}/cache
         ports:
           - 33306:3306
         options:
@@ -64,6 +65,25 @@ jobs:
       - name: Install Dependencies
         if: steps.vendor-cache.outputs.cache-hit != 'true'
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      # Restore cache
+      - name: Restore Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.CACHE_PATH }}
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+          restore-keys: |
+            ${{ runner.os }}-
+            ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}-
+
+      # Save cache
+      - name: Save Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.CACHE_PATH }}
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+
+      # generate key
       - name: Generate key
         run: php artisan key:generate
       - name: Change Directory Permissions
