@@ -1,0 +1,54 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          composer install
+          npm install
+      - name: Build assets
+        run: |
+          npm run build
+
+      - name: Run Testing (PHPUnit)
+        run: |
+          vendor/bin/phpunit
+          npm run test
+
+  deploy-staging:
+    needs: build
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to staging
+        uses: easingthemes/ssh-deploy@v2.3.5
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_host: ${{ secrets.STAGING_REMOTE_HOST }}
+          remote_user: ${{ secrets.STAGING_REMOTE_USER }}
+          remote_path: ${{ secrets.STAGING_REMOTE_PATH }}
+          args: --exclude '.git*'
+
+  deploy-production:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production
+        uses: easingthemes/ssh-deploy@v2.3.5
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          remote_host: ${{ secrets.PRODUCTION_REMOTE_HOST }}
+          remote_user: ${{ secrets.PRODUCTION_REMOTE_USER }}
+          remote_path: ${{ secrets.PRODUCTION_REMOTE_PATH }}
+          args: --exclude '.git*'
