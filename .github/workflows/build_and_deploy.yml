@@ -1,7 +1,9 @@
 name: Laravel Build and Deploy To Amezmo
 on:
   push:
-    branches: [master]
+    branches:
+      - main
+      - staging
 jobs:
   build:
     runs-on: ubuntu-latest # Machine To Run On
@@ -10,10 +12,11 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE:  weg_hr
+          MYSQL_DATABASE: weg_hr
         ports:
           - 33306:3306
-        options: >-  # Set health checks to wait until mysql database has started (it takes some seconds to start)
+        options:
+          >- # Set health checks to wait until mysql database has started (it takes some seconds to start)
           --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
@@ -38,7 +41,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: "7.4"
       - name: Get Composer Cache Directory 2
         id: composer-cache
         run: |
@@ -46,8 +49,8 @@ jobs:
       - uses: actions/cache@v2
         id: actions-cache
         with:
-          path: '${{ steps.composer-cache.outputs.dir }}'
-          key: '${{ runner.os }}-composer-${{ hashFiles(''**/composer.lock'') }}'
+          path: "${{ steps.composer-cache.outputs.dir }}"
+          key: "${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}"
           restore-keys: |
             ${{ runner.os }}-composer-
       - name: Cache PHP dependencies
@@ -55,7 +58,7 @@ jobs:
         id: vendor-cache
         with:
           path: vendor
-          key: '${{ runner.OS }}-build-${{ hashFiles(''**/composer.lock'') }}'
+          key: "${{ runner.OS }}-build-${{ hashFiles('**/composer.lock') }}"
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.ci', '.env');" # If .env exist, we use that, if otherwise, copy .env.example to .env and use that instead
       - name: Install Dependencies
@@ -76,8 +79,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-            name: github-actions-demo
-            path: github-actions-demo.zip
+          name: github-actions-demo
+          path: github-actions-demo.zip
       - name: Upload Release
         uses: svenstaro/upload-release-action@v2
         with:
