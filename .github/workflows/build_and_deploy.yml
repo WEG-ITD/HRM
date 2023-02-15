@@ -12,13 +12,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          composer install
-          npm install
+
+      - name: Configure PHP 7.4
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 7.4 | 8.0
+          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist
+
       - name: Build assets
-        run: |
-          npm run build
+        run: npm run build
 
       - name: Run Testing (PHPUnit)
         run: |
