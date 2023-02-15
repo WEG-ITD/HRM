@@ -97,8 +97,9 @@ jobs:
       #   run: chmod -R 775 ~/storage && chmod -R 775 ~/bootstrap/cache
       # - name: Clear Config
       #   run: php artisan config:clear
-      - name: Run Migration
-        run: php artisan migrate --force
+      # - name: Run Migration
+      #   run: php artisan migrate --force
+
       - name: Create an Archive For Release
         uses: montudor/action-zip@v0.1.0
         with:
