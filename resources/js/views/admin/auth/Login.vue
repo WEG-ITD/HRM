@@ -23,6 +23,7 @@
                 name="login"
                 type="text"
                 color="blue-grey"
+                autocomplete="off"
               />
               <v-text-field
                 v-model="form.password"
@@ -30,6 +31,7 @@
                 name="password"
                 type="password"
                 color="blue-grey"
+                autocomplete="off"
               />
             </v-card-text>
             <v-card-actions>
@@ -80,7 +82,7 @@ export default {
   data() {
     return {
       form:{
-        
+
         user_name: "",
         password: "",
         },
@@ -97,7 +99,7 @@ export default {
       axios.get('/sanctum/csrf-cookie').then(response => {
             this.$store
             .dispatch("retrieveToken", this.form).then(response => {
-              
+
               this.loading =  false;
                 console.log(response);
               if(response.data.status!=200){
@@ -116,11 +118,11 @@ export default {
                   });
                 }
               }
-             
+
             }).catch(error=>{
                 console.log(error)
             });
-            
+
       });
     }
   }
