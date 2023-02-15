@@ -118,19 +118,19 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
           body: "Latest Release"
-  # deploy:
-  #     needs: [build] # The below only runs if the build is succesful
-  #     runs-on: ubuntu-latest
-  #     steps:
-  #       - name: Download Latest ZIP Release
-  #         run: |
-  #           curl -s https://api.github.com/repos/amezmo/WEG-HRM/releases/latest | \
-  #           grep -E "browser_download_url" | grep -Eo 'https://[^\"]*' | xargs wget -O "latest.zip"
-  #       - name: Deploy The App To Server
-  #         run: |
-  #           curl --request POST \
-  #           --url https://api.amezmo.com/api/sites/${{ secrets.SITE_ID }}/deployments \
-  #           --header 'authorization: Bearer ${{ secrets.API_KEY }}' \
-  #           --header 'content-type: multipart/form-data' \
-  #           --form environment=production \
-  #           --form archive=@latest.zip
+  deploy:
+      needs: [build] # The below only runs if the build is succesful
+      runs-on: ubuntu-latest
+      steps:
+        - name: Download Latest ZIP Release
+          run: |
+            curl -s https://api.github.com/repos/WEG-ITD/HRM/releases/latest | \
+            grep -E "browser_download_url" | grep -Eo 'https://[^\"]*' | xargs wget -O "latest.zip"
+        - name: Deploy The App To Server
+          run: |
+            curl --request POST \
+            --url http://www.hr.wegcambodia.lan/admin/login/${{ secrets.SITE_ID }}/deployments \
+            --header 'authorization: Bearer ${{ secrets.API_KEY }}' \
+            --header 'content-type: multipart/form-data' \
+            --form environment=production \
+            --form archive=@latest.zip
