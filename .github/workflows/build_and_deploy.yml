@@ -21,10 +21,6 @@ jobs:
         run: composer install --no-dev --no-interaction --prefer-dist
       # - name: Build assets
       #   run: npm run build
-      - name: Run Testing (PHPUnit)
-        run: |
-          vendor/bin/phpunit
-          npm run test
 
   deploy-staging:
     needs: build
@@ -39,6 +35,12 @@ jobs:
           remote_user: ${{ secrets.STAGING_REMOTE_USER }}
           remote_path: ${{ secrets.STAGING_REMOTE_PATH }}
           args: --exclude '.git*'
+      - name: Test staging site
+        run: |
+          curl -s http://www.hr-staging.wegcambodia.lan | grep "Welcome to Laravel"
+          # additional tests can be added here
+      - name: Run additional tests
+        run: vendor/bin/phpunit tests/Feature/testUserLogin.php
 
   deploy-production:
     needs: build
@@ -53,3 +55,7 @@ jobs:
           remote_user: ${{ secrets.PRODUCTION_REMOTE_USER }}
           remote_path: ${{ secrets.PRODUCTION_REMOTE_PATH }}
           args: --exclude '.git*'
+      - name: Test production site
+        run: |
+          curl -s http://www.hr.wegcambodia.lan | grep "Your site on product working well"
+          # additional tests can be added here
