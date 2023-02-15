@@ -102,18 +102,18 @@ jobs:
       - name: Create an Archive For Release
         uses: montudor/action-zip@v0.1.0
         with:
-          args: zip -X -r github-actions-demo.zip . -x ".git/*" "node_modules/*" "tests/*" ".github/*" composer.* package* phpunit.xml # We excluding git, node_modules, and others not needed in production
+          args: zip -X -r WEG-HRM.zip . -x ".git/*" "node_modules/*" "tests/*" ".github/*" composer.* package* phpunit.xml # We excluding git, node_modules, and others not needed in production
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: github-actions-demo
-          path: github-actions-demo.zip
+          name: WEG-HRM
+          path: WEG-HRM.zip
       - name: Upload Release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: github-actions-demo.zip
-          asset_name: github-actions-demo
+          file: WEG-HRM.zip
+          asset_name: WEG-HRM
           tag: ${{ github.ref }}
           overwrite: true
           body: "Latest Release"
@@ -123,7 +123,7 @@ jobs:
   #     steps:
   #       - name: Download Latest ZIP Release
   #         run: |
-  #           curl -s https://api.github.com/repos/amezmo/github-actions-demo/releases/latest | \
+  #           curl -s https://api.github.com/repos/amezmo/WEG-HRM/releases/latest | \
   #           grep -E "browser_download_url" | grep -Eo 'https://[^\"]*' | xargs wget -O "latest.zip"
   #       - name: Deploy The App To Server
   #         run: |
