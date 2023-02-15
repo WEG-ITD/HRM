@@ -1,55 +1,62 @@
-name: Build and Deploy
+name: Laravel Deployment
 
 on:
   push:
     branches:
       - main
-      - staging
+
+env:
+  SSH_HOST: ${{ secrets.SSH_HOST }}
+  SSH_PORT: ${{ secrets.SSH_PORT }}
+  SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+  PRODUCTION_DEPLOY_BRANCH: "main"
+  STAGING_DEPLOY_BRANCH: "staging"
 
 jobs:
-  build:
+  deploy_production:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Configure PHP 7.4
-        uses: shivammathur/setup-php@master
-        with:
-          php-version: 7.4 | 8.0
-          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
-      - name: Install Composer dependencies
-        run: composer install --no-dev --no-interaction --prefer-dist
-      # - name: Build assets
-      #   run: npm run build
-      - name: Run Testing (PHPUnit)
-        run: |
-          vendor/bin/phpunit
-          npm run test
-
-  deploy-staging:
-    needs: build
-    if: github.ref == 'refs/heads/staging'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to staging
-        uses: easingthemes/ssh-deploy@v2.3.5
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          remote_host: ${{ secrets.STAGING_REMOTE_HOST }}
-          remote_user: ${{ secrets.STAGING_REMOTE_USER }}
-          remote_path: ${{ secrets.STAGING_REMOTE_PATH }}
-          args: --exclude '.git*'
-
-  deploy-production:
-    needs: build
     if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
     steps:
-      - name: Deploy to production
-        uses: easingthemes/ssh-deploy@v2.3.5
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.PRODUCTION_DEPLOY_BRANCH }}
+
+      - name: Install Dependencies
+        run: |
+          composer install --no-interaction --no-ansi --no-scripts --ignore-platform-reqs
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Deploy Code
+        uses: easingthemes/ssh-deploy@v2.1.6
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          remote_host: ${{ secrets.PRODUCTION_REMOTE_HOST }}
-          remote_user: ${{ secrets.PRODUCTION_REMOTE_USER }}
-          remote_path: ${{ secrets.PRODUCTION_REMOTE_PATH }}
-          args: --exclude '.git*'
+          args: '-rltgoDzvO --delete'
+          local-path: '.'
+          remote-path: '~/WEG/hrm'
+
+  deploy_staging:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/staging'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.STAGING_DEPLOY_BRANCH }}
+
+      - name: Install Dependencies
+        run: |
+          composer install --no-interaction --no-ansi --no-scripts
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Deploy Code
+        uses: easingthemes/ssh-deploy@v2.1.6
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          args: '-rltgoDzvO --delete'
+          local-path: '.'
+          remote-path: '~/WEG/hrm_staging'
