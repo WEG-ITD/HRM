@@ -67,21 +67,28 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       # Restore cache
-      - name: Restore Cache
+      - name: Restore cache
         uses: actions/cache@v2
         with:
-          path: ${{ env.CACHE_PATH }}
-          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+          path: |
+            vendor
+            node_modules
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}-npm-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-
-            ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}-
+            ${{ runner.os }}-composer-
+            ${{ runner.os }}-npm-
+      # Build assets
+      - name: Build assets
+        run: npm run production
 
       # Save cache
-      - name: Save Cache
+      - name: Save cache
         uses: actions/cache@v2
         with:
-          path: ${{ env.CACHE_PATH }}
-          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+          path: |
+            vendor
+            node_modules
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}-npm-${{ hashFiles('package-lock.json') }}
 
       # generate key
       - name: Generate key
