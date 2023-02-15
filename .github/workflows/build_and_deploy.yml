@@ -24,7 +24,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          composer install --no-interaction --no-ansi --no-scripts
+          composer install --no-interaction --no-ansi --no-scripts --ignore-platform-reqs
 
       - name: Generate Application Key
         run: php artisan key:generate
