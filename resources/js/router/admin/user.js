@@ -9,6 +9,7 @@ import Country from '../../views/admin/Countries/Index.vue'
 import Religion from '../../views/admin/Religions/Index.vue'
 import Language from '../../views/admin/Languages/Index.vue'
 import Position from '../../views/admin/Positions/Index.vue'
+import CertificateTemplate from '../../views/admin/Certificates/Index.vue'
 export default [
     {
         path: '/admin',
@@ -113,6 +114,15 @@ export default [
         meta: {
             requiresAuth: true,
             permission: 'Language',
+        }
+    },
+    {
+        path: '/admin/certificate-templates',
+        name: 'admin.certificate-templates',
+        component: CertificateTemplate,
+        meta: {
+            requiresAuth: true,
+            permission: 'certificate-template',
         }
     },
 ]

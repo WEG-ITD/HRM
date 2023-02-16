@@ -9,6 +9,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SidemenuController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ReligionController;
@@ -63,8 +64,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         'religions' => ReligionController::class,
         'languages' => LanguageController::class,
         'positions' => PositionController::class,
+        'certificate-templates' => CertificateController::class,
     ]);
-
 });
 
 

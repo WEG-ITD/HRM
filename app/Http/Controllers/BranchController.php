@@ -23,7 +23,7 @@ class BranchController extends Controller
      */
     public function __construct()
     {
-        $this->authorizeResource(Branch::class, 'branch');
+        $this->authorizeResource(Branch::class, 'branchess');
     }
     public function index()
     {
