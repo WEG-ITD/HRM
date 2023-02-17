@@ -15,6 +15,7 @@ class Certificate extends Model
         'user_id',
         'page_layout',
         'user_photo_style',
+        'photo_size',
         'layout_spacing_top',
         'layout_spacing_bottom',
         'layout_spacing_right',

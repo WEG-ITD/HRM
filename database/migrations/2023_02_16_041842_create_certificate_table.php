@@ -13,12 +13,13 @@ class CreateCertificateTable extends Migration
             $table->unsignedBigInteger('branch_id');
             $table->string('title');
             $table->unsignedBigInteger('user_id');
-            $table->enum('page_layout', ['A4 Portrait', 'A4 Landscape']);
+            $table->enum('page_layout', ['A4 (Portrait)', 'A4 (Landscape)']);
             $table->enum('user_photo_style', ['Round', 'Square']);
-            $table->integer('layout_spacing_top');
-            $table->integer('layout_spacing_bottom');
-            $table->integer('layout_spacing_right');
-            $table->integer('layout_spacing_left');
+            $table->integer('photo_size')->nullable();
+            $table->integer('layout_spacing_top')->nullable();
+            $table->integer('layout_spacing_bottom')->nullable();
+            $table->integer('layout_spacing_right')->nullable();
+            $table->integer('layout_spacing_left')->nullable();
             $table->string('signature_image')->nullable();
             $table->string('logo_image')->nullable();
             $table->string('background_image')->nullable();
