@@ -35,12 +35,8 @@ class UserController extends Controller
  
         if (Auth::attempt(['user_name'=>$request->user_name,'password'=>$request->password])) {
             $request->session()->regenerate();
- 
             $user=Auth::user();
-      
-           
             //menus
-
             $menu=[];
             $nonReportModuleId=[0];
             $reportModuleId=[0];

@@ -20,7 +20,6 @@
                 <p class="text-h5 text--primary">Certificate Information</p>
                 <v-text-field
                   v-model="form.title"
-                  :error-messages="nameEnErrors"
                   :counter="100"
                   label="Certificate title"
                   required
@@ -42,7 +41,7 @@
                       :items="branches"
                       item-text="name_en"
                       item-value="id"
-                      label="Branch"
+                      label="Branch/Department"
                       :rules="[rules.required]"
                     ></v-select>
                   </v-col>
@@ -83,11 +82,8 @@
                   <v-col cols="12" sm="4">
                     <v-text-field
                         v-model="form.photo_size"
-                        :error-messages="nameEnErrors"
                         :counter="100"
                         label="Photo Size"
-                        @input="$v.form.photo_size.$touch()"
-                        @blur="$v.form.photo_size.$touch()"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -97,12 +93,22 @@
                             show-size
                             label="Signature Image"
                             v-model="form.signature_image"
-                            @input="$v.form.signature_image.$touch()"
-                            @blur="$v.form.signature_image.$touch()"
                         ></v-file-input>
                     </v-col>
-                    <v-col cols="12" md="4"></v-col>
-                    <v-col cols="12" md="4"></v-col>
+                    <v-col cols="12" md="4">
+                      <v-file-input
+                            show-size
+                            label="Logo Image"
+                            v-model="form.logo_image"
+                        ></v-file-input>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <v-file-input
+                            show-size
+                            label="Background Image"
+                            v-model="form.background_image"
+                        ></v-file-input>
+                    </v-col>
                 </v-row>
                 <v-row>
                     <v-col cols="12" sm="3">
@@ -110,38 +116,27 @@
                             v-model="form.layout_spacing_top"
                             :counter="100"
                             label="Layout Spacing Top (px)"
-                            @input="$v.form.layout_spacing_top.$touch()"
-                            @blur="$v.form.layout_spacing_top.$touch()"
                         ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="3">
                         <v-text-field
                             v-model="form.layout_spacing_bottom"
-                            :error-messages="nameEnErrors"
                             :counter="100"
                             label="Layout Spacing Bottom (px)"
-                            @input="$v.form.layout_spacing_bottom.$touch()"
-                            @blur="$v.form.layout_spacing_bottom.$touch()"
                         ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="3">
                         <v-text-field
                             v-model="form.layout_spacing_left"
-                            :error-messages="nameEnErrors"
                             :counter="100"
                             label="Layout Spacing Left (px)"
-                            @input="$v.form.layout_spacing_left.$touch()"
-                            @blur="$v.form.layout_spacing_left.$touch()"
                         ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="3">
                         <v-text-field
                             v-model="form.layout_spacing_right"
-                            :error-messages="nameEnErrors"
                             :counter="100"
                             label="Layout Spacing Right (px)"
-                            @input="$v.form.layout_spacing_right.$touch()"
-                            @blur="$v.form.layout_spacing_right.$touch()"
                         ></v-text-field>
                     </v-col>
                 </v-row>
@@ -200,8 +195,6 @@ export default {
   mixins: [validationMixin],
   props: {
     certificates: Object(),
-    branches: Array(),
-    users: Array(),
   },
   components: {
     VueEditor,
@@ -214,6 +207,8 @@ export default {
   data() {
     return {
       errors: [],
+      users: [],
+      branches: [],
       form: {
         title: "",
         branch_id: null,
@@ -229,6 +224,8 @@ export default {
         layout_spacing_top: "",
         layout_spacing_bottom: "",
         signature_image: null,
+        logo_image: null,
+        background_image: null,
       },
       rules: {
         required: (value) => !!value || "Required.",
@@ -251,32 +248,32 @@ export default {
       ],
     };
   },
-  computed: {
-    nameEnErrors() {
-      const errors = [];
-      if (!this.$v.form.title.$dirty) return errors;
-      !this.$v.form.title.maxLength &&
-        errors.push("title must be at most 30 characters long");
-      !this.$v.form.title.required && errors.push("title is required.");
-      return errors;
-    },
-    nameKhErrors() {
-      const errors = [];
-      if (!this.$v.form.name_kh.$dirty) return errors;
-      !this.$v.form.name_kh.maxLength &&
-        errors.push("Name_kh must be at most 30 characters long");
-      !this.$v.form.name_kh.required && errors.push("Name_kh is required.");
-      return errors;
-    },
-    codeErrors() {
-      const errors = [];
-      if (!this.$v.form.code.$dirty) return errors;
-      !this.$v.form.code.maxLength &&
-        errors.push("code must be at most 30 characters long");
-      !this.$v.form.code.required && errors.push("code is required.");
-      return errors;
-    },
-  },
+  // computed: {
+  //   nameEnErrors() {
+  //     const errors = [];
+  //     if (!this.$v.form.title.$dirty) return errors;
+  //     !this.$v.form.title.maxLength &&
+  //       errors.push("title must be at most 30 characters long");
+  //     !this.$v.form.title.required && errors.push("title is required.");
+  //     return errors;
+  //   },
+  //   nameKhErrors() {
+  //     const errors = [];
+  //     if (!this.$v.form.name_kh.$dirty) return errors;
+  //     !this.$v.form.name_kh.maxLength &&
+  //       errors.push("Name_kh must be at most 30 characters long");
+  //     !this.$v.form.name_kh.required && errors.push("Name_kh is required.");
+  //     return errors;
+  //   },
+  //   codeErrors() {
+  //     const errors = [];
+  //     if (!this.$v.form.code.$dirty) return errors;
+  //     !this.$v.form.code.maxLength &&
+  //       errors.push("code must be at most 30 characters long");
+  //     !this.$v.form.code.required && errors.push("code is required.");
+  //     return errors;
+  //   },
+  // },
   methods: {
     async fetchBranches() {
       const response = await axios.get(API_ENDPOINTS.BRANCHES);
@@ -296,12 +293,18 @@ export default {
 
         const formData = new FormData();
         formData.append('signature_image', this.form.signature_image);
+        formData.append('logo_image', this.form.logo_image);
+        formData.append('background_image', this.form.background_image);
+        _.each(this.form, (value, key) => {//foreach data form for past to forData
+          formData.append(key, value)
+        }) 
         try {
           const response = await axios.post(
-            API_ENDPOINTS.CERTIFICATE_TEMPLATES, this.form, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+            API_ENDPOINTS.CERTIFICATE_TEMPLATES, formData,
+            {
+              headers: {
+                'Content-Type': 'multipath/form-data'
+              }
             }
           );
           this.$emit("refresh");

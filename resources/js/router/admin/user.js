@@ -1,6 +1,7 @@
 import Dashboard from '../../views/admin/Dashboard.vue'
 import User from '../../views/admin/Users/Index.vue'
 import CreateUser from '../../views/admin/Users/Create.vue'
+import UpdateUser from '../../views/admin/Users/Edit.vue'
 import Role from '../../views/admin/Roles/Index.vue'
 import Permission from '../../views/admin/Roles/Permission.vue'
 import Branch from '../../views/admin/Branches/Index.vue'
@@ -35,15 +36,24 @@ export default [
             permission:'user'
         }
     },
-    // {
-    //     path: '/admin/users/:create',
-    //     name: 'admin.users',
-    //     component: CreateUser,
-    //     meta: {
-    //         requiresAuth: true,
-    //         permission:'user'
-    //     }
-    // },
+    {
+        path: '/admin/add-employees',
+        name: 'admin.add-employees',
+        component: CreateUser,
+        meta: {
+            requiresAuth: true,
+            permission:'user'
+        }
+    },
+    {
+        path: '/admin/update-employee',
+        name: 'admin.update-employee',
+        component: UpdateUser,
+        meta: {
+            requiresAuth: true,
+            permission:'user'
+        }
+    },
     {
         path: '/admin/roles',
         name: 'admin.roles',

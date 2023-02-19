@@ -54,9 +54,6 @@ class SidemenuSeeder extends Seeder
             "is_report"=>0,
             'created_by'=>1,
         ]);
-
-        
-       
         DB::table('sidemenus')->insert([
             "module_id"=>1,
             "icon"=>"mdi-account-multiple",
