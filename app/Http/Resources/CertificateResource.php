@@ -13,8 +13,8 @@ class CertificateResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'branch_id' => $this->branch_id,
-            'user_id' => $this->user_id,
+            'branch_id' => $this->branch->name_en,
+            'user_id' => $this->user->name,
             'page_layout' => $this->page_layout,
             'user_photo_style' => $this->user_photo_style,
             'layout_spacing_top' => $this->layout_spacing_top,
@@ -31,6 +31,7 @@ class CertificateResource extends JsonResource
                 'delete' => Auth::user()->can('delete', Certificate::find($this->id)),
                 'update' => Auth::user()->can('update', Certificate::find($this->id)),
             ]
+            
         ];
     }
 }

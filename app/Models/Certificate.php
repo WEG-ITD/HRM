@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Certificate extends Model
 {
     use HasFactory;
-
+    // protected $policy = CertificatePolicy::class;
     protected $fillable = [
         'branch_id',
         'title',
@@ -25,6 +25,11 @@ class Certificate extends Model
         'background_image',
         'certificate_content',
     ];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 
     public function user()
     {
