@@ -117,70 +117,75 @@ import Tooltip from "@/components/Tooltip.vue";
 import Snackbar from "@/components/Snackbar"
 import axios from "axios";
 export default {
-    components:{
-        Tooltip,
-        Snackbar
+  components: {
+    Tooltip,
+    Snackbar
+  },
+  props: {
+    headers: {
+      default: [],
+      type: Array
     },
-    props:{
-            headers:{default:[],type:Array},
-            items:{default:[],type:Array},
-            title:{default:'Title',type:String},
-            routeString:{default:'',type:String},
-            openEditDialog: { type: Function },
-            openViewDialog: { type: Function },
-            loading:Boolean(),
-
-        },
-    data () {
-        return {
-            snackbar: false,
-            snackColor:'',
-            message:'',
-            search:'',
-            dialog:false,
-            deleting_item:Object(),
-        }
+    items: {
+      default: [],
+      type: Array
     },
-    // computed: {
-    //     noData () {
-    //         return this.headers.filter('No result found')
-    //     }
-    // },
-    methods:{
-
-            openDialogConfirmation(item){
-                this.message = '';
-                this.dialog = true;
-                this.deleting_item=item;
-                console.log(this.deleting_item);
-            },
-            deleteItem (item) {
-                    this.dialog = false;
-                    this.$root.Overlay.on();
-                    axios.delete("/api/"+this.routeString+"/"+item.id)
-                    .then(response => {
-                        if (response) {
-                            // this.message = response.data.message;
-                            // this.snackColor=response.data.snackColor;
-                            // this.snackbar = true;
-                            this.$emit('refresh');
-
-                            this.$root.Snackbar.show({message: response.data.message,snackColor:response.data.snackColor,})
-                            this.$root.Overlay.off();
-                        }
-                    }).catch(error => {
-                        if(error){
-                            // this.message = error;
-                            // this.snackbar = true;
-                            // this.snackColor='error';
-                            //console.log(error.response);
-                            this.$root.Snackbar.show({message:error+' '+error.response.data.message,snackColor:'error',})
-                            this.$root.Overlay.off();
-                        }
-                    });
-            },
-     }
-}
+    title: {
+      default: 'Title',
+      type: String
+    },
+    routeString: {
+      default: '',
+      type: String
+    },
+    openEditDialog: Function,
+    openViewDialog: Function,
+    loading: Boolean
+  },
+  data() {
+    return {
+      snackbar: false,
+      snackColor: '',
+      message: '',
+      search: '',
+      dialog: false,
+      deleting_item: {}
+    };
+  },
+  methods: {
+    openDialogConfirmation(item) {
+      this.message = '';
+      this.dialog = true;
+      this.deleting_item = item;
+      console.log(this.deleting_item);
+    },
+    deleteItem(item) {
+      this.dialog = false;
+      this.$root.Overlay.on();
+      axios
+        .delete(`/api/${this.routeString}/${item.id}`)
+        .then(response => {
+          if (response) {
+            this.$emit('refresh');
+            this.$root.Snackbar.show({
+              message: response.data.message,
+              snackColor: response.data.snackColor
+            });
+            this.$root.Overlay.off();
+          }
+        })
+        .catch(error => {
+          if (error) {
+            this.$root.Snackbar.show({
+              message: `${error} ${error.response.data.message}`,
+              snackColor: 'error'
+            });
+            this.$root.Overlay.off();
+          }
+        });
+    }
+  }
+};
 </script>
 
 <style>

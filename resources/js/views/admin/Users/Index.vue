@@ -71,7 +71,6 @@ export default {
                 axios
                     .get("/api/roles")
                     .then(response => {
-
                         //console.log('asd');
                         //console.log(response.data.data);
                         this.listRole = response.data.data.roles;

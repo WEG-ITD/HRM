@@ -102,7 +102,7 @@ export default {
     mixins: [validationMixin],
     props: {
         user: Object(),
-        listRole:Array(),
+        // listRole:Array(),
     },
     components: {
     },
@@ -133,6 +133,7 @@ export default {
                 role_id:[],
             },
             overlay: false,
+            listRole: []
         };
     },
     computed: {
@@ -172,6 +173,9 @@ export default {
             return errors
         },
     },
+    created() {
+        this.getRoles();
+    },
     methods: {
         submit() {
             this.$v.$touch();
@@ -205,6 +209,20 @@ export default {
                     });
             }
 
+        },
+        getRoles() {
+            return new Promise((resolve, reject) => {
+                axios
+                    .get("/api/roles")
+                    .then(response => {
+                        //console.log('asd');
+                        //console.log(response.data.data);
+                        this.listRole = response.data.data.roles;
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
         },
         clear() {
             this.$v.form.$reset();
