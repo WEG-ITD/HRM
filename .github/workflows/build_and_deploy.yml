@@ -34,7 +34,7 @@ jobs:
 
       - name: Install Composer dependencies
 
-        run: composer install --no-dev --no-interaction --prefer-dist
+        run: composer install --no-dev --no-interaction --prefer-dist --no-platform
 
       - name: Create deployment artifacts
 
