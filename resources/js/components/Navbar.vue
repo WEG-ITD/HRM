@@ -38,9 +38,7 @@
                                     </v-list-item>
                                     <v-divider class="m-0 p-0 grey"></v-divider>
                                     <v-list-item @change="themeChange()">
-                                        <!-- <v-list-item-icon> -->
                                         <v-switch v-model="$vuetify.theme.dark"></v-switch>
-                                        <!-- </v-list-item-icon> -->
                                         <v-list-item-content>
                                             <v-list-item-title>Dark Mode</v-list-item-title>
                                         </v-list-item-content>
@@ -65,7 +63,6 @@
                             <v-img style="margin:auto" lazy-src="/images/logo/logo.png" width="88%"
                                 src="/images/logo/logo.png">
                             </v-img>
-                            <!-- <div style="text-align: center;">Westline Education Group</div> -->
                         </v-card>
                         <template v-for="menu in menus">
                             <v-list-item color="primary" link :to="menu.link" :key="menu.id"
@@ -95,7 +92,6 @@
                             </v-list-group>
                         </template>
                     </v-list>
-
                 </v-navigation-drawer>
             </nav>
         </template>
@@ -103,87 +99,75 @@
 </template>
 
 <script>
-export default {
-    props: {
-        source: String
-    },
-    data: () => ({
-        user: null,
-        drawer: null,
-        menu: "",
-        notifications:[
-
-        ]
-    }),
-    created() {
-        this.menus=this.$store.state.auth.menu;
-        this.listToTree(this.menus);
-        this.user = this.$store.state.auth.user;
-    },
-    methods: {
-        logout() {
-            this.$store.dispatch("destroyToken").then(response => {
-                //console.log(response);
-                this.$router.push({ name: "admin.login" });
-            });
+    export default {
+        props: {
+            source: String
         },
-        listToTree(list) {
-            list.sort((a, b) => (a.ordering < b.ordering ? -1 : 1));
-            //console.log('asdfas');
-            const map = {};
-            let node;
-            const roots = [];
-            let i;
-            for (i = 0; i < list.length; i += 1) {
-                map[list[i].id] = i; // initialize the map
-                list[i].children = []; // initialize the children
+        data() {
+            return {
+                user: null,
+                drawer: null,
+                menu: "",
+                notifications: []
+            };
+        },
+        computed: {
+            menus() {
+                return this.$store.state.auth.menu;
             }
-            for (i = 0; i < list.length; i += 1) {
+        },
+        created() {
+            this.listToTree(this.menus);
+            this.user = this.$store.state.auth.user;
+        },
+        methods: {
+            logout() {
+                this.$store.dispatch("destroyToken").then(() => {
+                    this.$router.push({ name: "admin.login" });
+                });
+            },
+            listToTree(list) {
+                list.sort((a, b) => a.ordering - b.ordering);
 
-                node = list[i];
-                if (node.parentId !== null && node.parentId !==0) {
-
-                    // if you have dangling branches check that map[node.parentId] exists
-                    if( list[map[node.parentId]]!=undefined){
-                        // //console.log('here');
-                        list[map[node.parentId]].children.push(node);
+                const map = {};
+                let node;
+                const roots = [];
+                for (let i = 0; i < list.length; i++) {
+                    map[list[i].id] = i;
+                    list[i].children = [];
+                }
+                for (let i = 0; i < list.length; i++) {
+                    node = list[i];
+                    if (node.parentId !== null && node.parentId !== 0) {
+                        if (list[map[node.parentId]]) {
+                            list[map[node.parentId]].children.push(node);
+                        }
+                    } else {
+                        roots.push(node);
                     }
-                } else {
-                    roots.push(node);
                 }
-            }
-            // Register the navigation to the service
-
-            // Set the main navigation as our current navigation
-            return roots;
-        },
-        currentLinkIsChild(children){
-            let childHas=0;
-            children.forEach(element => {
-                //console.log(this.$route.fullPath);
-                if(element.link===this.$route.fullPath){
+                return roots;
+            },
+            currentLinkIsChild(children) {
+                let childHas = 0;
+                children.forEach((element) => {
+                    if (element.link === this.$route.fullPath) {
                     childHas++;
-                }
-            });
-
-            if(childHas>0){
-                return true;
-            }else{
-
-                return false;
+                    }
+                });
+                return childHas > 0;
+            },
+            noticed(n) {
+                this.notifications.splice(0, 1);
+                this.$inertia.post("notifications/noticed", n);
+            },
+            themeChange() {
+                localStorage.setItem(
+                    "theme_dark",
+                    this.$vuetify.theme.dark.toString()
+                );
             }
-        },
-        noticed(n){
-            // //console.log(this.notification);
-            this.notifications.splice(0,1);
-            // //console.log(this.notification);
-            this.$inertia.post('notifications/noticed',n);
-        },
-        themeChange(){
-            localStorage.setItem('theme_dark', this.$vuetify.theme.dark.toString());
-        },
-    },
+        }
+    };
 
-};
 </script>
-
