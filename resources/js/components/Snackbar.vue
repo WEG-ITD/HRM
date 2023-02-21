@@ -1,8 +1,9 @@
 <template>
-     <v-snackbar
+    <v-snackbar
         v-if="message&&snackbar"
         v-model="snackbar"
         top
+        outline
         timeout="4000"
         :color="snackColor"
         right
