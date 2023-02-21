@@ -1,11 +1,12 @@
 <template>
-     <v-snackbar
+    <v-snackbar
         v-if="message&&snackbar"
         v-model="snackbar"
         top
+        outline
         timeout="4000"
         :color="snackColor"
-        centered
+        right
     >
         <v-icon v-if="snackColor=='success'" dark large>mdi-check-circle</v-icon>
         <v-icon v-else dark large>mdi-exclamation-thick</v-icon>
@@ -24,12 +25,11 @@
 
 <script>
 export default {
-     props:{
-          
+    props:{
 
     },
     computed:{
-            
+
     },
     data () {
         return {
@@ -54,7 +54,3 @@ export default {
     }
 }
 </script>
-
-<style>
-
-</style>

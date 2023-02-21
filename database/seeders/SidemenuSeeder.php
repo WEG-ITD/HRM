@@ -16,7 +16,7 @@ class SidemenuSeeder extends Seeder
     {
         DB::table('sidemenus')->insert([
             "module_id"=>1,
-            "icon"=>"mdi-view-dashboard",
+            "icon"=>"mdi-view-dashboard-outline",
             "name"=>"Dashboard",
             "link"=>"/admin/dashboard",
             "type"=>1,
@@ -29,22 +29,22 @@ class SidemenuSeeder extends Seeder
         ]);
         DB::table('sidemenus')->insert([
             "module_id"=>1,
-            "icon"=>"mdi-settings",
+            "icon"=>"mdi-settings-outline",
             "name"=>"Settings",
             "link"=>"/admin",
             "type"=>0,
             "status"=>1,
             "deleted_at"=>null,
-            "ordering"=>1,
+            "ordering"=>10,
             "parentId"=>0,
             "is_report"=>0,
             'created_by'=>1,
         ]);
-      
+
         DB::table('sidemenus')->insert([
             "module_id"=>1,
             "icon"=>"mdi-format-list-checks",
-            "name"=>"Roles",
+            "name"=>"Role permissions",
             "link"=>"/admin/roles",
             "type"=>1,
             "status"=>1,
@@ -56,8 +56,21 @@ class SidemenuSeeder extends Seeder
         ]);
         DB::table('sidemenus')->insert([
             "module_id"=>1,
+            "icon"=>"mdi-account-group-outline",
+            "name"=>"Employee",
+            "link"=>"/admin",
+            "type"=>0,
+            "status"=>1,
+            "deleted_at"=>null,
+            "ordering"=>1,
+            "parentId"=>0,
+            "is_report"=>0,
+            'created_by'=>1,
+        ]);
+        DB::table('sidemenus')->insert([
+            "module_id"=>1,
             "icon"=>"mdi-account-multiple",
-            "name"=>"Users",
+            "name"=>"Employee list",
             "link"=>"/admin/users",
             "type"=>1,
             "status"=>1,

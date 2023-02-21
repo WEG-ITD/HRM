@@ -142,6 +142,8 @@ export default {
                 { text: 'Applicable User', value: 'user_id' },
                 // { text: 'Description', value: 'description' },
                 { text: 'Page Layout', value: 'page_layout' },
+                // { text: 'Background Image', value: 'background_image'},
+                { text: 'Created', value: 'date' },
                 { text: 'Action', value: 'actions', sortable: false },
             ],
             //end props for table
