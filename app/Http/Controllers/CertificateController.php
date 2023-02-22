@@ -20,7 +20,7 @@ class CertificateController extends Controller
 
     public function index()
     {
-        return new CertificateCollection(Certificate::orderBy('id')->get());
+        return new CertificateCollection(Certificate::orderBy('created_at', 'desc')->get());
     }
 
     public function store(Request $request)

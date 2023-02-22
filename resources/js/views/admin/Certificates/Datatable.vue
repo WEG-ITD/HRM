@@ -1,15 +1,9 @@
 <template>
     <div class="m-1" style="margin:auto">
-        <Table @refresh="$emit('refresh')" :loading="loading" :headers="headers" :items="certificates" :title="title"
+        <Table @refresh="$emit('refresh')" :loading="loading" :headers="headers" :items="certificates" :title="title" :actions="actions"
             :routeString="routeString" :openEditDialog="openEditDialog">
             <template v-slot:[`item.index`]="{ index }">
                 {{ index + 1 }}
-            </template>
-            <template v-slot:[`item.is_main`]="{ item }">
-                <v-checkbox :input-value="(item.is_main == 1)" disabled value></v-checkbox>
-            </template>
-            <template v-slot:[`item.have_workflow`]="{ item }">
-                <v-checkbox :input-value="(item.have_workflow == 1)" disabled value></v-checkbox>
             </template>
         </Table>
         <!--Edit dialog-->
@@ -131,7 +125,11 @@ export default {
                 { id: 0, name: 'Group' },
                 { id: 1, name: 'Item' },
             ],
-
+            actions: {
+                view: true,
+                edit: true,
+                delete: true,
+            },
             errors: [],
             title: '',
             routeString: 'branches',
@@ -142,7 +140,7 @@ export default {
                 { text: 'Applicable User', value: 'user_id' },
                 // { text: 'Description', value: 'description' },
                 { text: 'Page Layout', value: 'page_layout' },
-                // { text: 'Background Image', value: 'background_image'},
+                { text: 'Background Image', value: 'background_image'},
                 { text: 'Created', value: 'date' },
                 { text: 'Action', value: 'actions', sortable: false },
             ],

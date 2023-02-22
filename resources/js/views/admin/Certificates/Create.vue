@@ -18,6 +18,7 @@
             <v-card class="mx-auto" elevation="1">
               <v-card-text>
                 <p class="text-h5 text--primary">Certificate Information</p>
+                <v-divider class="p-0 m-0"></v-divider>
                 <v-text-field
                   v-model="form.title"
                   :error-messages="titleErrors"
