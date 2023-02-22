@@ -27,7 +27,7 @@
   import Create from "./Create.vue";
   import { VueEditor } from "vue2-quill-editor";
   import axios from "axios";
-  
+
   export default {
     components: {
       Datatable,

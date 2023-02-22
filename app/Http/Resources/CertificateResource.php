@@ -27,6 +27,7 @@ class CertificateResource extends JsonResource
             'signature_image' => asset($this->signature_image),
             'logo_image' => asset($this->logo_image),
             'background_image' =>  asset($this->background_image),
+            'background_image_str' => (string)asset($this->background_image),
             'date' => $date->fullDate,
             'updated_at' => $this->updated_at,
             'can' => [
