@@ -1,92 +1,79 @@
 <template>
     <div class="m-1" style="margin:auto">
-        <div style="max-width:600px;" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Add Module-->
-            <v-card elevation="5">
-                <v-card-title> Add User </v-card-title>
-
-                <v-card-text>
-                    <div v-if="errors" style="color:red">
-                        <span v-for="(err,i) in errors" :key="i">
-
-                            <span style="display:block" v-for="e,index in err" :key="index">
-                               {{i}}: {{e}}
-                            </span>
-                        </span>
-                    </div>
-                    <form  @submit.prevent="submit">
-                        <v-text-field
-                            v-model="form.name"
-                            :error-messages="nameErrors"
-                            :counter="30"
-                            label="Name"
-                            required
-                            @input="$v.form.name.$touch()"
-                            @blur="$v.form.name.$touch()"
-                        ></v-text-field>
-                        <v-text-field
-                            v-model="form.user_name"
-                            :error-messages="staffErrors"
-                            :counter="7"
-                            label="Staff Id"
-                            required
-                            @input="$v.form.user_name.$touch()"
-                            @blur="$v.form.user_name.$touch()"
-                        ></v-text-field>
-                        <v-text-field
-                            v-model="form.phone"
-                            :error-messages="phoneErrors"
-                            :counter="10"
-                            label="Phone"
-                            required
-                            @input="$v.form.phone.$touch()"
-                            @blur="$v.form.phone.$touch()"
-                        ></v-text-field>
-                        <v-text-field
-                            v-model="form.email"
-                            :error-messages="emailErrors"
-                            label="E-mail"
-                            required
-                            @input="$v.form.email.$touch()"
-                            @blur="$v.form.email.$touch()"
-                        ></v-text-field>
-                        <v-text-field
-                            v-model="form.password"
-                            :error-messages="passwordErrors"
-                            label="Password"
-                            required
-                            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                            :type="show1 ? 'text' : 'password'"
-                            @click:append="show1 = !show1"
-                            @input="$v.form.password.$touch()"
-                            @blur="$v.form.password.$touch()"
-                        ></v-text-field>
-                        <v-combobox
-                            v-model="form.role_id"
-                            :items="listRole"
-                            multiple
-                            item-value="id"
-                            item-text="name"
-                            label="Role"
-                            required
-                        ></v-combobox>
-                        <v-btn
-                            color="success"
-                            class="mr-4"
-                            @click="submit"
-                        >
-                            submit
-                        </v-btn>
-                        <v-btn @click="clear">
-                            clear
-                        </v-btn>
-                    </form>
-                </v-card-text>
-            </v-card>
-
-        </div>
+      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <!-- Add Module-->
+        <v-card elevation="5">
+          <v-card-title> Add User </v-card-title>
+          <v-card-text>
+            <div v-if="errors" style="color:red">
+              <div v-for="(err,i) in errors" :key="i">
+                <div v-for="(e,index) in err" :key="index">{{i}}: {{e}}</div>
+              </div>
+            </div>
+            <form @submit.prevent="submit">
+              <v-text-field
+                v-model="form.name"
+                :error-messages="$v.form.name.$errorMessages"
+                :counter="30"
+                label="Name"
+                required
+                @input="$v.form.name.$touch()"
+                @blur="$v.form.name.$touch()"
+              ></v-text-field>
+              <v-text-field
+                v-model="form.user_name"
+                :error-messages="$v.form.user_name.$errorMessages"
+                :counter="7"
+                label="Staff Id"
+                required
+                @input="$v.form.user_name.$touch()"
+                @blur="$v.form.user_name.$touch()"
+              ></v-text-field>
+              <v-text-field
+                v-model="form.phone"
+                :error-messages="$v.form.phone.$errorMessages"
+                :counter="10"
+                label="Phone"
+                required
+                @input="$v.form.phone.$touch()"
+                @blur="$v.form.phone.$touch()"
+              ></v-text-field>
+              <v-text-field
+                v-model="form.email"
+                :error-messages="$v.form.email.$errorMessages"
+                label="E-mail"
+                required
+                @input="$v.form.email.$touch()"
+                @blur="$v.form.email.$touch()"
+              ></v-text-field>
+              <v-text-field
+                v-model="form.password"
+                :error-messages="$v.form.password.$errorMessages"
+                label="Password"
+                required
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show1 ? 'text' : 'password'"
+                @click:append="show1 = !show1"
+                @input="$v.form.password.$touch()"
+                @blur="$v.form.password.$touch()"
+              ></v-text-field>
+              <v-combobox
+                v-model="form.role_id"
+                :items="listRole"
+                multiple
+                item-value="id"
+                item-text="name"
+                label="Role"
+                required
+              ></v-combobox>
+              <v-btn color="success" class="mr-4" @click="submit">submit</v-btn>
+              <v-btn @click="clear">clear</v-btn>
+            </form>
+          </v-card-text>
+        </v-card>
+      </div>
     </div>
-</template>
+  </template>
 
 <script>
 import { validationMixin } from "vuelidate";
@@ -113,9 +100,7 @@ export default {
             email: { required, email },
             password: { required,minLength: minLength(8) },
             user_name:{ required, maxLength: maxLength(7) },
-
         }
-
     },
     data() {
         return {
@@ -180,13 +165,11 @@ export default {
         submit() {
             this.$v.$touch();
             let isFormCorrect = this.$v.form.$invalid;
-            // you can show some extra alert to the user or just leave the each field to show it's `$errors`.
             if (!isFormCorrect) {
                 this.$root.Overlay.on();
                 axios
                     .post("/api/users", this.form)
                     .then((response) => {
-                        //console.log(response);
                         if (response) {
                             this.errors = null;
                             this.$emit('refresh');

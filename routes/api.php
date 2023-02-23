@@ -14,6 +14,7 @@ use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ReligionController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\PositionController;
 
 /*
@@ -52,7 +53,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('user/removeRole/{roleUser_id}', [UserController::class, 'removeRole']);
     Route::post('user/resetPassword', [UserController::class, 'resetPassword']);
     Route::get('user/{user_id}/roles', [UserController::class, 'getUserRoles']);
-
+    Route::post('/sendmail', [MailController::class, 'sendMail']);
     Route::apiResources([
         'roles'=>RoleController::class,
         'users'=>UserController::class,
