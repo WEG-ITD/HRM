@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CommuneCollection;
 use App\Models\Commune;
 use Illuminate\Http\Request;
 
 class CommuneController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->authorizeResource(Commune::class, 'commune');
+    }
     public function index()
     {
-        //
+        return new CommuneCollection(Commune::orderBy('id')->get());
     }
 
     /**

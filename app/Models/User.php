@@ -38,7 +38,8 @@ class User extends Authenticatable
         'qualifications',
         'experience_detail',
         'total_experience',
-        'profile_picture'
+        'profile_picture',
+        'gender'
     ];
 
     /**

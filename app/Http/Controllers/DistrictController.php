@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\District;
 use Illuminate\Http\Request;
+use App\Http\Resources\DistrictCollection;
 
 class DistrictController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->authorizeResource(District::class, 'district');
+    }
+
     public function index()
     {
-        //
+        return new DistrictCollection(District::orderBy('id')->get());
     }
 
     /**

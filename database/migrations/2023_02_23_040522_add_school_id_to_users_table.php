@@ -14,13 +14,14 @@ class AddSchoolIdToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('school_id')->nullable();
-            $table->unsignedBigInteger('location_id')->nullable();
-            $table->unsignedBigInteger('religion_id')->nullable();
+            $table->unsignedBigInteger('school_id');
+            $table->unsignedBigInteger('location_id');
+            $table->unsignedBigInteger('religion_id');
             $table->string('firstname_en', 256);
             $table->string('firstname_kh', 256);
             $table->string('lastname_en', 256);
             $table->string('lastname_kh', 256);
+            $table->string('gender', 256);
             $table->timestamp('birth_date')->nullable();
             $table->timestamp('joining_date')->nullable();
             $table->text('qualifications')->nullable();
