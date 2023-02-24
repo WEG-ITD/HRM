@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\VillageCollection;
 use App\Models\Village;
 use Illuminate\Http\Request;
 
 class VillageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->authorizeResource(Village::class, 'village');
+    }
     public function index()
     {
-        //
+        return new VillageCollection(Village::orderBy('id')->get());
     }
 
     /**

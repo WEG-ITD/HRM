@@ -27,7 +27,19 @@ class User extends Authenticatable
         'phone',
         'status',
         'position_id',
-        'branch_id'
+        'branch_id',
+        'school_id',
+        'firstname_en',
+        'firstname_kh',
+        'lastname_en',
+        'lastname_kh',
+        'birth_date',
+        'joining_date',
+        'qualifications',
+        'experience_detail',
+        'total_experience',
+        'profile_picture',
+        'gender'
     ];
 
     /**

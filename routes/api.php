@@ -10,11 +10,16 @@ use App\Http\Controllers\SidemenuController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\CommuneController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\ReligionController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\ProvinceController;
+use App\Http\Controllers\VillageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +57,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('user/removeRole/{roleUser_id}', [UserController::class, 'removeRole']);
     Route::post('user/resetPassword', [UserController::class, 'resetPassword']);
     Route::get('user/{user_id}/roles', [UserController::class, 'getUserRoles']);
-
+    Route::post('/sendmail', [MailController::class, 'sendMail']);
     Route::apiResources([
         'roles'=>RoleController::class,
         'users'=>UserController::class,
@@ -61,6 +66,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         'branches' => BranchController::class,
         'schools' => SchoolController::class,
         'countries' => CountryController::class,
+        'provinces' => ProvinceController::class,
+        'districts' => DistrictController::class,
+        'communes' => CommuneController::class,
+        'villages' => VillageController::class,
         'religions' => ReligionController::class,
         'languages' => LanguageController::class,
         'positions' => PositionController::class,

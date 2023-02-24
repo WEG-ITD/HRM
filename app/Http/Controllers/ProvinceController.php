@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProvinceCollection;
 use App\Models\Province;
 use Illuminate\Http\Request;
 
 class ProvinceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->authorizeResource(Province::class, 'province');
+    }
+
     public function index()
     {
-        //
+        return new ProvinceCollection(Province::orderBy('id')->get());
     }
 
     /**
