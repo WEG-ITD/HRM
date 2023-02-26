@@ -353,12 +353,74 @@
                         </v-col>
                         <v-col cols="12" md="4" class="pt-0 pb-0">
                             <v-select
-                                v-model="selectedCountry"
+                                v-model="form.selectedCountry"
                                 :items="countries"
                                 item-value="id"
                                 item-text="name_en"
-                                required
                                 label="Country"
+                                prepend-icon="mdi-map-marker-radius-outline"
+                                required
+                                @input="fetchProvinces"                           
+                            ></v-select>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" md="3">
+                            <v-select
+                                v-model="form.selectedProvince"
+                                :items="provinces"
+                                item-value="id"
+                                item-text="name_en"
+                                label="Province / Municipality"
+                                prepend-icon="mdi-map-marker-radius-outline"
+                                required
+                                :disabled="!form.selectedCountry"
+                                @change="fetchDistricts"
+                                :error-messages="isProvinceDisabled ? ['Please select a country first.'] : []"
+                            >
+                            </v-select>
+                        </v-col>
+                        <v-col cols="12" md="3">
+                            <v-select
+                                v-model="form.selectedDistrict"
+                                :items="districts"
+                                item-value="id"
+                                item-text="name_en"
+                                label="District / Khan"
+                                prepend-icon="mdi-map-marker-radius-outline"
+                                required
+                                :disabled="!form.selectedProvince"
+                                @change="fetchCommunes"
+                                :error-messages="isDistrictDisabled ? ['Please select a province first.'] : []"
+                            >
+                            </v-select>
+                        </v-col>
+                        <v-col cols="12" md="3">.
+                            <v-select
+                                v-model="form.selectedCommune"
+                                :items="communes"
+                                item-value="id"
+                                item-text="name_en"
+                                required
+                                label="Communes / Sangkat"
+                                prepend-icon="mdi-map-marker-radius-outline"
+                                :disabled="!form.selectedDistrict"
+                                @change="fetchVillages"
+                                :error-messages="isCommuneDisabled ? ['Please select a district first.'] : []"
+                            >
+                            </v-select>
+                        </v-col>
+                        <v-col cols="12" md="3">
+                            <v-select
+                                v-model="form.selectedVillage"
+                                :items="villages"
+                                item-value="id"
+                                item-text="name_en"
+                                required
+                                label="Village"
+                                prepend-icon="mdi-map-marker-radius-outline"
+                                :disabled="!form.selectedCommune"
+                                :error-messages="isDistrictDisabled ? ['Please select a commune first.'] : []"
                             >
                             </v-select>
                         </v-col>
@@ -373,9 +435,6 @@
                 @input="$v.form.name.$touch()"
                 @blur="$v.form.name.$touch()"
               ></v-text-field>
-
-
-
               <v-text-field
                 v-model="form.password"
                 :error-messages="$v.form.password.$errorMessages"
@@ -447,7 +506,6 @@ export default {
             },
             selectedDate: null,
             activePicker: null,
-            selectedCountry: null,
             date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
             form:{
                 name: '',
@@ -471,6 +529,12 @@ export default {
                 experience_details: '',
                 total_experience: '',
                 profile_picture: null,
+                selectedCountry: null,
+                selectedCountry: null,
+                selectedProvince: null,
+                selectedDistrict: null,
+                selectedCommune: null,
+                selectedVillage: null,
             },
             overlay: false,
             listRole: [],
@@ -483,99 +547,17 @@ export default {
             districts: [],
             communes: [],
             villages: [],
-            selectedCountry: null,
-            selectedProvince: null,
-            selectedDistrict: null,
-            selectedCommune: null,
-            selectedVillage: null,
             bloods: ['A+', 'A-', 'B+', 'O+'],
             genders: ['Male', 'Female'],
             selectedDate: '',
 
         };
     },
-    computed: {
-        previewUrl() {
-            if (this.file) {
-                return URL.createObjectURL(this.file)
-            } else {
-                return '/images/user.png'
-            }
-        },
-        // generated new staff ID for NEW ADDED
-        async newStaffId() {
-            let staffList = [];
-            try {
-                // Make a GET request to the API endpoint to retrieve the staff data
-                const response = await axios.get(API_ENDPOINTS.USERS);
-                staffList = response.data.data;
-                console.log(staffList);
-            } catch (error) {
-                console.log(error);
-            }
-            // Find the highest staff ID in the staff data
-            const highestStaffId = staffList.reduce((maxId, staff) => {
-                const staffId = parseInt(staff.userName.substring(1));
-                return staffId > maxId ? staffId : maxId;
-            }, 0);
-            // Increment the highest staff ID by one and return the new staff ID
-            const newStaffIdNum = highestStaffId + 1;
-            const newStaffIdStr = 'W' + newStaffIdNum.toString().padStart(5, '0');
-            console.log('Computing new staff ID', newStaffIdStr);
-            return newStaffIdStr;
-        },
-        defaultCountry() {
-            return this.countries.find(c => c.id === 38);
-        },
-        nameErrors () {
-            const errors = []
-            if (!this.$v.form.name.$dirty) return errors
-            !this.$v.form.name.maxLength && errors.push('Name must be at most 30 characters long')
-            !this.$v.form.name.required && errors.push('Name is required.')
-            return errors
-        },
-        phoneErrors () {
-            const errors = []
-            if (!this.$v.form.phone.$dirty) return errors
-            !this.$v.form.phone.maxLength && errors.push('Phone must be at most 10 characters long')
-            !this.$v.form.phone.required && errors.push('Phone is required.')
-            return errors
-        },
-        staffErrors () {
-            const errors = []
-            if (!this.$v.form.user_name.$dirty) return errors
-            !this.$v.form.user_name.maxLength && errors.push('User Name must be at most 7 characters long')
-            !this.$v.form.user_name.required && errors.push('User Name is required.')
-            return errors
-        },
-        emailErrors () {
-            const errors = []
-            if (!this.$v.form.email.$dirty) return errors
-            !this.$v.form.email.email && errors.push('Must be valid e-mail')
-            !this.$v.form.email.required && errors.push('E-mail is required')
-            return errors
-        },
-        passwordErrors () {
-            const errors = []
-            if (!this.$v.form.password.$dirty) return errors
-            !this.$v.form.password.minLength && errors.push('Password must be at least 8 characters long')
-            !this.$v.form.password.required && errors.push('Password is required')
-            return errors
-        },
-    },
-    created() {
-        this.fetchBranches();
+    
+    mounted() {
         this.fetchCountries();
-        this.fetchPositions();
-        this.fetchRoles();
-        this.fetchSchools();
-        this.fetchReligions();
-        this.fetchProvinces();
-        this.fetchDistricts();
-        this.fetchCommunes();
-        this.fetchVillages();
-        this.selectedCountry = this.defaultCountry;
-    },
+    },  
+    
     methods: {
         async fetchBranches() {
             const response = await axios.get(API_ENDPOINTS.BRANCHES);
@@ -602,20 +584,53 @@ export default {
             this.religions = response.data.data;
         },
         async fetchProvinces() {
-            const response =  await axios.get(API_ENDPOINTS.PROVINCES);
-            this.provinces = response.data.data;
+            await axios.get(API_ENDPOINTS.PROVINCES).then(response => {
+                this.provinces = response.data.data;
+            });
         },
         async fetchDistricts() {
-            const response = await axios.get(API_ENDPOINTS.DISTRICTS);
-            this.districts = response.data.data;
+            if (this.form.selectedProvince) {
+                try {
+                    const response = await axios.get(API_ENDPOINTS.DISTRICTS, {
+                        params: {
+                            province_id: this.form.selectedProvince
+                        }
+                });
+                    this.districts = response.data.data;
+                } catch (error) {
+                    console.log(error);
+                }
+            }
         },
         async fetchCommunes() {
-            const response = await axios.get(API_ENDPOINTS.COMMUNES);
-            this.communes = response.data.data;
+            if (this.form.selectedDistrict) {
+                try {
+                    const response = await axios.get(API_ENDPOINTS.COMMUNES, {
+                        params: {
+                            district_id: this.form.selectedDistrict
+                        }
+                    });
+                    this.communes = response.data.data;
+                }catch(error) {
+                    console.log(error);
+                }
+            }
+            // const response = await axios.get(API_ENDPOINTS.COMMUNES, {
+            //     params: {
+            //         district_id: this.selectedDistrict,
+            //     }
+            // }).then(response => {
+            //     this.communes = response.data.data;
+            // });
         },
         async fetchVillages() {
-            const response = await axios.get(API_ENDPOINTS.VILLAGES);
-            this.villages = response.data.data;
+            const response = await axios.get(API_ENDPOINTS.VILLAGES, {
+                params: {
+                    commune_id: this.selectedCommune,
+                }
+            }).then(response => {
+                this.villages = response.data.data;
+            });
         },
         onFileSelected(event) {
             this.file = event.target.files[0];
@@ -672,6 +687,106 @@ export default {
             this.form.role_id = [];
         },
     },
+    computed: {
+        previewUrl() {
+            if (this.file) {
+                return URL.createObjectURL(this.file)
+            } else {
+                return '/images/user.png'
+            }
+        },
+        // generated new staff ID for NEW ADDED
+        async newStaffId() {
+            let staffList = [];
+            try {
+                // Make a GET request to the API endpoint to retrieve the staff data
+                const response = await axios.get(API_ENDPOINTS.USERS);
+                staffList = response.data.data;
+                console.log(staffList);
+            } catch (error) {
+                console.log(error);
+            }
+            // Find the highest staff ID in the staff data
+            const highestStaffId = staffList.reduce((maxId, staff) => {
+                const staffId = parseInt(staff.userName.substring(1));
+                return staffId > maxId ? staffId : maxId;
+            }, 0);
+            // Increment the highest staff ID by one and return the new staff ID
+            const newStaffIdNum = highestStaffId + 1;
+            const newStaffIdStr = 'W' + newStaffIdNum.toString().padStart(5, '0');
+            console.log('Computing new staff ID', newStaffIdStr);
+            return newStaffIdStr;
+        },
+        defaultCountry() {
+            return this.countries.find(c => c.id === 38);
+        },
+        // isDistrictDisabled() {
+        //     return !this.selectedProvince;
+        // },
+        // isProvinceDisabled() {
+        //     return !this.selectedDistrict;
+        // },
+        isProvinceDisabled() {
+            return !this.form.selectedCountry ? ['Please select a country first.'] : !this.form.selectedProvince ? ['Please select a province.'] : false;
+        },
+        isDistrictDisabled() {
+            return !this.form.selectedProvince ? ['Please select a province first.'] : !this.form.selectedDistrict ? ['Please select a district.'] : false;
+        },
+        isCommuneDisabled(){
+            return !this.form.selectedDistrict ? ['Please select a district first.'] : !this.form.selectedCommune ? ['Please select a village.'] : false;
+        },
+        isVillageDisabled(){
+            return !this.form.selectedCommune ? ['Please select a commune first.'] : !this.form.selectedVillage ? ['Please select a village.'] : false;
+        },
+        nameErrors () {
+            const errors = []
+            if (!this.$v.form.name.$dirty) return errors
+            !this.$v.form.name.maxLength && errors.push('Name must be at most 30 characters long')
+            !this.$v.form.name.required && errors.push('Name is required.')
+            return errors
+        },
+        phoneErrors () {
+            const errors = []
+            if (!this.$v.form.phone.$dirty) return errors
+            !this.$v.form.phone.maxLength && errors.push('Phone must be at most 10 characters long')
+            !this.$v.form.phone.required && errors.push('Phone is required.')
+            return errors
+        },
+        staffErrors () {
+            const errors = []
+            if (!this.$v.form.user_name.$dirty) return errors
+            !this.$v.form.user_name.maxLength && errors.push('User Name must be at most 7 characters long')
+            !this.$v.form.user_name.required && errors.push('User Name is required.')
+            return errors
+        },
+        emailErrors () {
+            const errors = []
+            if (!this.$v.form.email.$dirty) return errors
+            !this.$v.form.email.email && errors.push('Must be valid e-mail')
+            !this.$v.form.email.required && errors.push('E-mail is required')
+            return errors
+        },
+        passwordErrors () {
+            const errors = []
+            if (!this.$v.form.password.$dirty) return errors
+            !this.$v.form.password.minLength && errors.push('Password must be at least 8 characters long')
+            !this.$v.form.password.required && errors.push('Password is required')
+            return errors
+        },
+    },
+    created() {
+        this.fetchBranches();
+        // this.fetchCountries();
+        this.fetchPositions();
+        this.fetchRoles();
+        this.fetchSchools();
+        this.fetchReligions();
+        // this.fetchProvinces();
+        // this.fetchDistricts();
+        // this.fetchCommunes();
+        // this.fetchVillages();
+        this.selectedCountry = this.defaultCountry;
+    },
     watch: {
         selectedDate (val) {
             val && setTimeout(() => (this.activePicker = 'YEAR'))
@@ -680,6 +795,18 @@ export default {
             this.$nextTick(() => {
                 this.$refs.staffIdInput.$el.querySelector('input').value = this.newStaffId;
             });
+        },
+        // selectedProvince() {
+        //     if (this.selectedProvince) {
+        //         this.fetchDistricts();
+        //     } else {
+        //         this.districts = [];
+        //         this.form.selectedDistrict = null;
+        //     }
+        // }
+        selectedProvince() {
+            this.selectedDistrict = null;
+            this.fetchDistricts();
         }
     },
 };

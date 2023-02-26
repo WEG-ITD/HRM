@@ -13,9 +13,11 @@ class DistrictController extends Controller
         $this->authorizeResource(District::class, 'district');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return new DistrictCollection(District::orderBy('id')->get());
+        // return new DistrictCollection(District::orderBy('id')->get());
+        $province_id = $request->input('province_id');
+        return new DistrictCollection(District::orderBy('id')->where('province_id', $province_id)->get());
     }
 
     /**
