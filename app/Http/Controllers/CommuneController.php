@@ -12,9 +12,10 @@ class CommuneController extends Controller
     {
         $this->authorizeResource(Commune::class, 'commune');
     }
-    public function index()
+    public function index(Request $request)
     {
-        return new CommuneCollection(Commune::orderBy('id')->get());
+        $district_id = $request->input('district_id');
+        return new CommuneCollection(Commune::orderBy('id')->where('district_id', $district_id)->get());
     }
 
     /**
